@@ -1,4 +1,3 @@
-
 'use server';
 
 import { predictVirality } from '@/ai/flows/predict-virality';
@@ -52,7 +51,7 @@ export async function createCheckoutSession(prevState: State, formData: FormData
     metadata['critique_chunks'] = critiqueChunks.length.toString();
 
 
-    const domain = process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost:9002';
+    const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://willittrend.com';
 
     const checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
@@ -79,10 +78,17 @@ export async function createCheckoutSession(prevState: State, formData: FormData
         return { error: 'Could not create Stripe session.' };
     }
     
+    console.log(`Redirecting to Stripe: ${checkoutSession.url}`);
     redirect(checkoutSession.url);
 
   } catch (error: any) {
+    let errorMessage = 'An unexpected error occurred on our end. Please try again.';
+    if (error.cause && error.cause.code === 'UNAUTHENTICATED') {
+      errorMessage = "Authentication error. Your GEMINI_API_KEY might be invalid or missing from your .env file.";
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
+    }
     console.error(error);
-    return { error: error.message || 'An unexpected error occurred on our end. Please try again.' };
+    return { error: errorMessage };
   }
 }
