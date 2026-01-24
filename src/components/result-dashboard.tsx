@@ -1,30 +1,9 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import CircularProgress from '@/components/ui/circular-progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bot, Sparkles, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-
-function AnimatedText({ text, speed = 15 }: { text: string, speed?: number }) {
-  const [displayedText, setDisplayedText] = useState('');
-
-  useEffect(() => {
-    setDisplayedText(''); // Reset on text change
-    let i = 0;
-    const interval = setInterval(() => {
-      if (i < text.length) {
-        setDisplayedText(prev => prev + text.charAt(i));
-        i++;
-      } else {
-        clearInterval(interval);
-      }
-    }, speed);
-    return () => clearInterval(interval);
-  }, [text, speed]);
-
-  return <p className="whitespace-pre-wrap font-mono">{displayedText}</p>;
-}
 
 export default function ResultDashboard({ score, critique, hook_script }: { score: number, critique: string, hook_script: string }) {
   const getScoreColor = () => {
@@ -61,7 +40,7 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
           </CardTitle>
         </CardHeader>
         <CardContent className="text-muted-foreground text-lg">
-          <AnimatedText text={critique} />
+          <p className="whitespace-pre-wrap font-mono">{critique}</p>
         </CardContent>
       </Card>
       
@@ -73,7 +52,7 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
           </CardTitle>
         </CardHeader>
         <CardContent className="text-primary-foreground text-lg">
-           <AnimatedText text={hook_script} speed={30} />
+           <p className="whitespace-pre-wrap font-mono">{hook_script}</p>
         </CardContent>
       </Card>
 
