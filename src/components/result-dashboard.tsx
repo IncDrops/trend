@@ -4,8 +4,43 @@ import CircularProgress from '@/components/ui/circular-progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Bot, Sparkles, ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+
+function useTypingAnimation(text: string, speed: number = 15) {
+  const [animatedText, setAnimatedText] = useState('');
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    if (!text) {
+        setIsDone(true);
+        return;
+    };
+
+    setAnimatedText('');
+    setIsDone(false);
+
+    let index = 0;
+    const intervalId = setInterval(() => {
+      setAnimatedText((prev) => prev + text.charAt(index));
+      index++;
+      if (index >= text.length) {
+        clearInterval(intervalId);
+        setIsDone(true);
+      }
+    }, speed);
+
+    return () => clearInterval(intervalId);
+  }, [text, speed]);
+
+  return { animatedText, isDone };
+}
+
 
 export default function ResultDashboard({ score, critique, hook_script }: { score: number, critique: string, hook_script: string }) {
+  
+  const { animatedText: animatedCritique, isDone: critiqueDone } = useTypingAnimation(critique, 10);
+  const { animatedText: animatedHook, isDone: hookDone } = useTypingAnimation(hook_script, 20);
+
   const getScoreColor = () => {
     if (score >= 80) return 'text-primary';
     if (score < 50) return 'text-destructive';
@@ -39,8 +74,11 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
             Algorithm's Critique
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-muted-foreground text-lg">
-          <p className="whitespace-pre-wrap font-mono">{critique}</p>
+        <CardContent className="text-muted-foreground text-lg min-h-[100px]">
+          <p className="whitespace-pre-wrap font-mono">
+            {animatedCritique}
+            {!critiqueDone && <span className="inline-block w-2 h-5 bg-muted-foreground animate-ping ml-1" aria-hidden="true" />}
+          </p>
         </CardContent>
       </Card>
       
@@ -51,8 +89,11 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
             Optimized Hook
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-primary-foreground text-lg">
-           <p className="whitespace-pre-wrap font-mono">{hook_script}</p>
+        <CardContent className="text-primary-foreground text-lg min-h-[70px]">
+           <p className="whitespace-pre-wrap font-mono">
+            {animatedHook}
+            {!hookDone && <span className="inline-block w-2 h-5 bg-primary-foreground animate-ping ml-1" aria-hidden="true" />}
+           </p>
         </CardContent>
       </Card>
 
