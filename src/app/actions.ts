@@ -4,6 +4,7 @@ import { predictVirality } from '@/ai/flows/predict-virality';
 import { stripe } from '@/lib/stripe';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import type { Stripe } from 'stripe';
 
 const formSchema = z.object({
   idea: z.string().min(10, { message: 'Please describe your idea in at least 10 characters.' }).max(1000, { message: 'Your idea is too long. Please keep it under 1000 characters.' }),
@@ -30,6 +31,7 @@ export async function createCheckoutSession(prevState: State, formData: FormData
   }
 
   const { idea } = validatedFields.data;
+  let checkoutSession: Stripe.Checkout.Session;
 
   try {
     const viralityPrediction = await predictVirality({ idea });
@@ -53,7 +55,7 @@ export async function createCheckoutSession(prevState: State, formData: FormData
 
     const domain = process.env.NEXT_PUBLIC_DOMAIN || 'https://willittrend.com';
 
-    const checkoutSession = await stripe.checkout.sessions.create({
+    checkoutSession = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       line_items: [
         {
@@ -74,13 +76,6 @@ export async function createCheckoutSession(prevState: State, formData: FormData
       metadata,
     });
     
-    if (!checkoutSession.url) {
-        return { error: 'Could not create Stripe session.' };
-    }
-    
-    console.log(`Redirecting to Stripe: ${checkoutSession.url}`);
-    redirect(checkoutSession.url);
-
   } catch (error: any) {
     let errorMessage = 'An unexpected error occurred on our end. Please try again.';
     if (error.cause && error.cause.code === 'UNAUTHENTICATED') {
@@ -91,4 +86,11 @@ export async function createCheckoutSession(prevState: State, formData: FormData
     console.error(error);
     return { error: errorMessage };
   }
+  
+  if (!checkoutSession || !checkoutSession.url) {
+      return { error: 'Could not create Stripe session.' };
+  }
+
+  console.log(`Redirecting to Stripe: ${checkoutSession.url}`);
+  redirect(checkoutSession.url);
 }
