@@ -2,9 +2,11 @@
 
 import CircularProgress from '@/components/ui/circular-progress';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Bot, Sparkles, ArrowLeft } from 'lucide-react';
+import { Bot, Sparkles, ArrowLeft, Download, Copy } from 'lucide-react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/hooks/use-toast';
 
 function useTypingAnimation(text: string, speed: number = 15) {
   const [animatedText, setAnimatedText] = useState('');
@@ -40,6 +42,7 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
   
   const { animatedText: animatedCritique, isDone: critiqueDone } = useTypingAnimation(critique, 10);
   const { animatedText: animatedHook, isDone: hookDone } = useTypingAnimation(hook_script, 20);
+  const { toast } = useToast();
 
   const getScoreColor = () => {
     if (score >= 80) return 'text-primary';
@@ -55,12 +58,72 @@ export default function ResultDashboard({ score, critique, hook_script }: { scor
     if (score < 40) return "Cooked";
   }
 
+  const getFullReportText = () => {
+    return `
+Virality Score: ${score}/100
+Label: ${getScoreLabel()}
+
+---
+
+Algorithm's Critique:
+${critique}
+
+---
+
+Optimized Hook:
+${hook_script}
+    `.trim();
+  };
+
+  const handleDownload = () => {
+    const reportText = getFullReportText();
+    const blob = new Blob([reportText], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'will-it-trend-report.txt';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  const handleCopy = () => {
+    const reportText = getFullReportText();
+    navigator.clipboard.writeText(reportText).then(() => {
+      toast({
+        title: 'Copied to clipboard!',
+        description: 'The full report has been copied.',
+      });
+    }).catch(err => {
+        console.error('Failed to copy text: ', err);
+        toast({
+            variant: 'destructive',
+            title: 'Failed to copy',
+            description: 'Could not copy text to clipboard.',
+        });
+    });
+  };
+
   return (
     <div className="w-full max-w-4xl mx-auto p-4 md:p-8 space-y-8 animate-in fade-in duration-500">
-       <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors mb-4">
-          <ArrowLeft size={16} />
-          Try Another Idea
-        </Link>
+        <div className="flex flex-wrap justify-between items-center gap-4">
+            <Link href="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                <ArrowLeft size={16} />
+                Try Another Idea
+            </Link>
+            <div className="flex items-center gap-2">
+                <Button variant="outline" onClick={handleCopy}>
+                    <Copy />
+                    Copy
+                </Button>
+                <Button variant="outline" onClick={handleDownload}>
+                    <Download />
+                    Download .txt
+                </Button>
+            </div>
+        </div>
+
       <div className="flex flex-col items-center justify-center">
         <CircularProgress value={score} size={200} strokeWidth={12} />
         <h2 className={`text-3xl font-bold mt-4 ${getScoreColor()}`}>{getScoreLabel()}</h2>
