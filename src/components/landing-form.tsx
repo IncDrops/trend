@@ -1,8 +1,8 @@
 
 'use client';
 
-import { useFormState, useFormStatus } from 'react-dom';
-import { useEffect } from 'react';
+import { useFormStatus } from 'react-dom';
+import { useActionState, useEffect } from 'react';
 import { createCheckoutSession } from '@/app/actions';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -31,7 +31,7 @@ function SubmitButton() {
 
 export default function LandingForm() {
   const initialState = { message: '', error: '' };
-  const [state, formAction] = useFormState(createCheckoutSession, initialState);
+  const [state, formAction] = useActionState(createCheckoutSession, initialState);
   const { toast } = useToast();
 
   useEffect(() => {
