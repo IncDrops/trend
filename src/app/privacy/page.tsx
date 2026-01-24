@@ -11,49 +11,44 @@ export default function PrivacyPolicy() {
         </Link>
         <h1 className="text-4xl font-bold text-primary mb-6">Privacy Policy</h1>
         <div className="prose prose-invert max-w-none space-y-4 text-muted-foreground">
-          <p>Last updated: {new Date().toLocaleDateString()}</p>
+          <p>Last updated: 1/24/2026</p>
+
+          <h2 className="text-2xl font-semibold text-foreground pt-4">1. Introduction</h2>
           <p>
-            Welcome to Trend Oracle ("we", "our", "us"). We are committed to
-            protecting your privacy. This Privacy Policy explains how your
-            personal information is collected, used, and disclosed by Trend
-            Oracle.
+            WillItTrend.com ("we," "us," or "the Service") respects the creative integrity of your content. We understand that your video ideas and scripts are your Intellectual Property (IP).
           </p>
-          <h2 className="text-2xl font-semibold text-foreground pt-4">Information We Collect</h2>
+
+          <h2 className="text-2xl font-semibold text-foreground pt-4">2. Information We Collect</h2>
+          <ul>
+            <li><strong>Content Ideas:</strong> The text descriptions, scripts, or hooks you enter into the analysis tool.</li>
+            <li><strong>Transaction Data:</strong> Payment processing is handled entirely by Stripe. We do not access or store your full credit card information.</li>
+            <li><strong>Usage Data:</strong> Anonymous metrics on site traffic and generation frequency to improve our service.</li>
+          </ul>
+
+          <h2 className="text-2xl font-semibold text-foreground pt-4">3. How We Handle Your Ideas (The "No Theft" Clause)</h2>
+          <ul>
+            <li><strong>Transient Processing:</strong> Your video ideas are sent to our AI provider (Google Gemini) <strong>solely</strong> to generate the critique and score.</li>
+            <li><strong>No Retention:</strong> We do not build a database of user video ideas. Once the analysis is delivered to your screen, the text of your idea is discarded from our immediate application memory.</li>
+            <li><strong>No Training:</strong> We do not use your specific content ideas to train our own AI models.</li>
+            <li><strong>No Reuse:</strong> We will not take your submitted ideas and use them for our own social media channels.</li>
+          </ul>
+
+          <h2 className="text-2xl font-semibold text-foreground pt-4">4. Third-Party Sharing</h2>
+          <p>We share data only with essential infrastructure providers:</p>
+          <ul>
+            <li><strong>Stripe:</strong> For secure payment processing.</li>
+            <li><strong>Google AI:</strong> For text generation (subject to Google's Enterprise Data Privacy standards).</li>
+            <li><strong>Legal Authorities:</strong> Only if compelled by a valid court order.</li>
+          </ul>
+          
+          <h2 className="text-2xl font-semibold text-foreground pt-4">5. Security</h2>
           <p>
-            We collect information you provide directly to us. When you submit a
-            video idea, we process that text to provide our service. We do not
-            store your video ideas after the analysis is complete. For payment
-            processing, we use Stripe, a third-party payment processor. We do
-            not collect or store your payment card details. That information is
-            provided directly to Stripe, whose use of your personal information
-            is governed by their Privacy Policy.
+            We use industry-standard SSL/TLS encryption to protect data in transit. However, no internet transmission is 100% secure.
           </p>
-          <h2 className="text-2xl font-semibold text-foreground pt-4">How We Use Your Information</h2>
+
+          <h2 className="text-2xl font-semibold text-foreground pt-4">6. Contact</h2>
           <p>
-            We use the information we collect to operate, maintain, and provide
-            you with the features and functionality of the service, and to
-            process transactions. We do not use your video ideas for any other
-            purpose.
-          </p>
-          <h2 className="text-2xl font-semibold text-foreground pt-4">Sharing Your Information</h2>
-          <p>
-            We do not share your personal information with third parties except
-            as described in this Privacy Policy. We may share your information
-            with third-party vendors and service providers that perform services
-            on our behalf, such as payment processing (Stripe) and AI model
-            providers (Google).
-          </p>
-          <h2 className="text-2xl font-semibold text-foreground pt-4">Data Retention</h2>
-          <p>
-            This is a stateless application. We do not maintain a database and do not
-            retain your video idea or the results of the analysis. Information
-            related to your transaction is stored by Stripe according to their
-            data retention policies.
-          </p>
-          <h2 className="text-2xl font-semibold text-foreground pt-4">Changes to This Privacy Policy</h2>
-          <p>
-            We may update our Privacy Policy from time to time. We will notify
-            you of any changes by posting the new Privacy Policy on this page.
+            For privacy concerns: <strong>privacy@willittrend.com</strong>
           </p>
         </div>
       </div>
