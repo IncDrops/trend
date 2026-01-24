@@ -81,8 +81,8 @@ export async function createCheckoutSession(prevState: State, formData: FormData
     
     redirect(checkoutSession.url);
 
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return { error: 'An unexpected error occurred on our end. Please try again.' };
+    return { error: error.message || 'An unexpected error occurred on our end. Please try again.' };
   }
 }
