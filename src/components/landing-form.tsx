@@ -3,7 +3,7 @@
 
 import { useFormStatus } from 'react-dom';
 import { useActionState, useEffect } from 'react';
-import { createCheckoutSession } from '@/app/actions';
+import type { State } from '@/app/actions';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
@@ -29,8 +29,12 @@ function SubmitButton() {
   );
 }
 
-export default function LandingForm() {
-  const initialState = { message: '', error: '' };
+type LandingFormProps = {
+  createCheckoutSession: (prevState: State, formData: FormData) => Promise<State>;
+};
+
+export default function LandingForm({ createCheckoutSession }: LandingFormProps) {
+  const initialState: State = { message: '', error: '' };
   const [state, formAction] = useActionState(createCheckoutSession, initialState);
   const { toast } = useToast();
 

@@ -1,6 +1,7 @@
 import GlitchTitle from '@/components/glitch-title';
 import LandingForm from '@/components/landing-form';
 import Link from 'next/link';
+import { createCheckoutSession } from '@/app/actions';
 
 export default function Home() {
   return (
@@ -13,7 +14,7 @@ export default function Home() {
           <p className="text-lg md:text-xl text-muted-foreground mb-8">
             Stop guessing. Start knowing. Get an AI-powered virality audit of your video idea for just $1.
           </p>
-          <LandingForm />
+          <LandingForm createCheckoutSession={createCheckoutSession} />
         </div>
       </main>
       <footer className="py-6 px-4 text-center text-muted-foreground">

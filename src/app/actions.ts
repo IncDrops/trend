@@ -10,7 +10,7 @@ const formSchema = z.object({
   idea: z.string().min(10, { message: 'Please describe your idea in at least 10 characters.' }).max(1000, { message: 'Your idea is too long. Please keep it under 1000 characters.' }),
 });
 
-type State = {
+export type State = {
   message?: string;
   error?: string;
   fieldErrors?: {
