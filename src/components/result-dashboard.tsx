@@ -14,21 +14,24 @@ function useTypingAnimation(text: string, speed: number = 15) {
 
   useEffect(() => {
     if (!text) {
-        setIsDone(true);
-        return;
-    };
+      setIsDone(true);
+      setAnimatedText('');
+      return;
+    }
 
     setAnimatedText('');
     setIsDone(false);
-
-    let index = 0;
+    
     const intervalId = setInterval(() => {
-      setAnimatedText((prev) => prev + text.charAt(index));
-      index++;
-      if (index >= text.length) {
-        clearInterval(intervalId);
-        setIsDone(true);
-      }
+      setAnimatedText(currentText => {
+        const nextLength = currentText.length + 1;
+        if (nextLength > text.length) {
+          clearInterval(intervalId);
+          setIsDone(true);
+          return currentText;
+        }
+        return text.slice(0, nextLength);
+      });
     }, speed);
 
     return () => clearInterval(intervalId);
@@ -152,10 +155,10 @@ ${hook_script}
             Optimized Hook
           </CardTitle>
         </CardHeader>
-        <CardContent className="text-primary-foreground text-lg min-h-[70px]">
+        <CardContent className="text-foreground text-lg min-h-[70px]">
            <p className="whitespace-pre-wrap font-mono">
             {animatedHook}
-            {!hookDone && <span className="inline-block w-2 h-5 bg-primary-foreground animate-ping ml-1" aria-hidden="true" />}
+            {!hookDone && <span className="inline-block w-2 h-5 bg-foreground animate-ping ml-1" aria-hidden="true" />}
            </p>
         </CardContent>
       </Card>
